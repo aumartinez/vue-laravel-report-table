@@ -1,6 +1,7 @@
 <script setup>
 import DataTable from 'datatables.net-vue3'
 import $ from 'jquery'
+import { URL } from '../static/global.js'
 
 const columns = [
   { data: 'id' },
@@ -17,6 +18,7 @@ const columns = [
     visible: false, 
   },
 ]
+
 </script>
 
 <template>  
@@ -25,7 +27,7 @@ const columns = [
       <div class="col-md-12">
         <DataTable
         :columns="columns"
-        ajax="http://localhost:8000/api/data"
+        :ajax="URL.GET_API"
         class="display"
         width="100%"
         >
