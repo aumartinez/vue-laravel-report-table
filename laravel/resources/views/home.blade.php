@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <link rel="icon" href="{{ asset('vite.svg') }}" />
     <title>Report</title>    
-    <script defer="defer" src="{{ asset('index.js') }}"></script>    
+    <script type="module" defer="defer" src="{{ asset('index.js') }}"></script>    
     <link href="{{ asset('index.css') }}" rel="stylesheet" />
   </head>
   <body>

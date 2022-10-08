@@ -22,12 +22,19 @@ import { RouterLink } from 'vue-router'
           </button>
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-              <li class="nav-item active">
+              <li class="nav-item">
                 <RouterLink to="/" 
                 class="nav-link">
                   <span>Home</span>
                   <span class="sr-only">(current)</span>
                 </RouterLink>                
+              </li>
+              <li class="nav-item">
+                <RouterLink to="/table" 
+                class="nav-link">
+                  <span>Table</span>
+                  <span class="sr-only">(current)</span>
+                </RouterLink>
               </li>
             </ul>
           </div>
@@ -38,4 +45,7 @@ import { RouterLink } from 'vue-router'
 </template>
 
 <style scoped lang="scss">
+.router-link-active {
+  font-weight: bold;
+}
 </style>

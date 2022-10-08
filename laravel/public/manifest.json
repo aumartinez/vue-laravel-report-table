@@ -3,9 +3,27 @@
     "file": "index.js",
     "src": "index.html",
     "isEntry": true,
+    "dynamicImports": [
+      "src/pages/TheTablePage.vue"
+    ],
     "css": [
       "index.css"
     ]
+  },
+  "src/pages/TheTablePage.vue": {
+    "file": "TheTablePage.js",
+    "src": "src/pages/TheTablePage.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html"
+    ],
+    "css": [
+      "TheTablePage.css"
+    ]
+  },
+  "src/pages/TheTablePage.css": {
+    "file": "TheTablePage.css",
+    "src": "src/pages/TheTablePage.css"
   },
   "index.css": {
     "file": "index.css",
