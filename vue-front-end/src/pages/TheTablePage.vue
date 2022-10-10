@@ -1,5 +1,8 @@
 <script setup>
+import { ref, onMounted } from 'vue'
 import DataTable from 'datatables.net-vue3'
+import SearchBuilder from 'datatables.net-searchbuilder'
+import DateTime from 'datatables.net-datetime'
 import { URL } from '../static/global.js'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
@@ -7,7 +10,10 @@ import $ from 'jquery'
 
 dayjs.extend(utc)
 
-const options = {
+DataTable.use(DateTime)
+DataTable.use(SearchBuilder)
+
+const ajax = {
   url: URL.GET_API,
   dataSrc: function (json) {
     let newData = json.data
@@ -20,9 +26,14 @@ const options = {
   }
 }
 
+const options = {
+  dom: 'Qfrtip'
+}
+
 const columns = [
   { data: 'id' },
-  { data: 'calldate' },
+  { data: 'calldate',
+    type: 'date' },
   { data: 'cnam' },
   { data: 'dst' },
   { data: 'dcontext' },
@@ -41,10 +52,13 @@ const columns = [
 <template>  
   <div class="container">
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-12">        
         <DataTable
+        ref="table"
+        id="record-list"
         :columns="columns"
-        :ajax="options"
+        :ajax="ajax"
+        :options="options"
         class="display"
         width="100%"
         >
@@ -82,7 +96,14 @@ const columns = [
 
 <style>
 @import 'datatables.net-dt';
+@import 'datatables.net-searchbuilder-dt';
+@import 'datatables.net-datetime';
+
 .hidden {
   display: none;
+}
+
+.btn-long {
+  width: 100%;
 }
 </style>
