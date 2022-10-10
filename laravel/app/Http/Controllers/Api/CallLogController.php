@@ -37,13 +37,25 @@ class CallLogController extends Controller
             ];    
         });
 
-        return $results;
+        # Grouping by dates
+        $grouped = $results->groupBy('date');
+
+        # Filtering duplicates
+        $filtered = $grouped->map(function($item){
+            return $item->unique('name');
+        });
+
+        $filtered = $filtered->flatten(1);        
+        return response()->json([
+            'data' => $filtered->values(),
+        ]);
     }
 
     public function countRecords ($item, $disposition) {
         $count = CallLogs::select('disposition')
                 ->whereDay('calldate','=', date('d', strtotime($item->calldate)))
                 ->whereMonth('calldate', '=', date('m', strtotime($item->calldate)))
+                ->whereYear('calldate', '=', date('Y', strtotime($item->calldate)))
                 ->where('cnam', '=', $item->cnam)
                 ->where('disposition','=', $disposition)
                 ->count();
