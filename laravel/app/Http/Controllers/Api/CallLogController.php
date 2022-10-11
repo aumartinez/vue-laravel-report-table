@@ -34,8 +34,10 @@ class CallLogController extends Controller
             ];
         });
 
+        # Grouping by date and names
         $grouped = $mapped->groupBy(['date', 'name']);
 
+        # Mapping dispositions fields for each returned name
         $results = $grouped->map(function($item){
             return [
                 $item->map(function($child){
@@ -66,12 +68,12 @@ class CallLogController extends Controller
 
     public function average (Request $request)
     {
-        $agents = CallLogs::select('calldate', 'cnam', 'duration')
+        $query = CallLogs::select('calldate', 'cnam', 'duration')
                 ->where('cnam','<>','')
                 ->orderBy('cnam')
                 ->get();
 
-        $results = $agents->map(function($item) {
+        $results = $query->map(function($item) {
             return [
                 'date' => date('Y-m-d', strtotime($item->calldate)),
                 'name' => $item->cnam,
