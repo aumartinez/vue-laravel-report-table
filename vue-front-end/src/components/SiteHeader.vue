@@ -7,7 +7,7 @@ import { RouterLink } from 'vue-router'
     <div class="row">
       <div class="col-md-12">
         <nav class="navbar navbar-expand-lg navbar-light bg-light p-3">
-          <a class="navbar-brand" href="#">Navbar Brand</a>
+          <a class="navbar-brand" href="/">Navbar Brand</a>
           <button 
           class="navbar-toggler" 
           type="button" 
