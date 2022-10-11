@@ -20,17 +20,33 @@ const options = {
   rowGroup: {
       dataSrc: 'date'
   },
+  order: [[0, 'asc']],
+  drawCallback: function (settings) {
+    let api = this.api()
+    let rows = api.rows({ page: 'current' }).nodes()
+    let last = null
+
+    api
+    .column(0, { page: 'current' })
+    .data()
+    .each(function (group, i) {
+      if (last !== group) {
+        $(rows)
+        .eq(i)
+        .before('<tr class="group"><td colspan="6">' + group + '</td></tr>')
+        last = group
+      }
+    })
+  },
   footerCallback: function() {
     let api = this.api()
     let intVal = function (i) {
                     if (typeof i === 'string') {
                       return i.replace(/[\$,]/g, '') * 1 
-                    }
-                    
+                    }                    
                     if (typeof i === 'number') {
                       return i
-                    }
-                    
+                    }                    
                     return 0
                   }
  
@@ -112,4 +128,8 @@ const options = {
 
 <style>
 @import 'datatables.net-dt';
+
+table.dataTable tbody tr.group {
+  background-color: #ccc;
+}
 </style>
