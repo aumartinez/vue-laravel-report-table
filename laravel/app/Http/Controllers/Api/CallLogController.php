@@ -21,33 +21,46 @@ class CallLogController extends Controller
 
     public function pivot (Request $request)
     {
-        $agents = CallLogs::select('cnam', 'calldate', 'disposition')
+        $query = CallLogs::select('cnam', 'calldate', 'disposition')
                 ->where('cnam','<>','')
                 ->orderBy('cnam')
                 ->get();
 
-        $results = $agents->map(function($item) {
+        $mapped = $query->map(function ($item){
             return [
                 'date' => date('Y-m-d', strtotime($item->calldate)),
                 'name' => $item->cnam,
-                'answered' => $this->countRecords($item, 'ANSWERED'),
-                'noanswered' => $this->countRecords($item, 'NO ANSWER'),
-                'busy' => $this->countRecords($item, 'BUSY'),
-                'congestion' => $this->countRecords($item, 'CONGESTION'),
-            ];    
+                'disposition' => $item->disposition,
+            ];
         });
 
-        # Grouping by dates
-        $grouped = $results->groupBy('date');
+        $grouped = $mapped->groupBy(['date', 'name']);
 
-        # Filtering duplicates
-        $filtered = $grouped->map(function($item){
-            return $item->unique('name');
-        });        
+        $results = $grouped->map(function($item){
+            return [
+                $item->map(function($child){
+                    return [
+                        'date' => $child[0]['date'],
+                        'name' => $child[0]['name'],
+                        'answered' => $child->filter(function($value){
+                                        return $value['disposition'] === 'ANSWERED';
+                                    })->count(),
+                        'noanswered' => $child->filter(function($value){
+                                        return $value['disposition'] === 'NO ANSWER';
+                                    })->count(),
+                        'busy' => $child->filter(function($value){
+                                        return $value['disposition'] === 'BUSY';
+                                    })->count(),
+                        'congestion' => $child->filter(function($value){
+                                        return $value['disposition'] === 'CONGESTION';
+                                    })->count(),
+                    ];
+                }),
+            ];
+        });
 
-        $filtered = $filtered->flatten(1);        
         return response()->json([
-            'data' => $filtered->values(),
+            'data' => $results->flatten(2),
         ]);
     }
 
@@ -85,17 +98,5 @@ class CallLogController extends Controller
         return response()->json([
             'data' => $average->flatten(2),
         ]);
-    }
-
-    protected function countRecords ($item, $disposition) {
-        $count = CallLogs::select('disposition')
-                ->whereDay('calldate','=', date('d', strtotime($item->calldate)))
-                ->whereMonth('calldate', '=', date('m', strtotime($item->calldate)))
-                ->whereYear('calldate', '=', date('Y', strtotime($item->calldate)))
-                ->where('cnam', '=', $item->cnam)
-                ->where('disposition','=', $disposition)
-                ->count();
-
-        return $count;
     }
 }
