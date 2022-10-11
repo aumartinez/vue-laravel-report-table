@@ -23,18 +23,23 @@ const options = {
   footerCallback: function() {
     let api = this.api()
     let intVal = function (i) {
-                    return typeof i === 'string' ?
-                            i.replace(/[\$,]/g, '')*1 :
-                            typeof i === 'number' ?
-                            i : 0
+                    if (typeof i === 'string') {
+                      return i.replace(/[\$,]/g, '') * 1 
+                    }
+                    
+                    if (typeof i === 'number') {
+                      return i
+                    }
+                    
+                    return 0
                   }
  
     let answeredTotal = api
-                      .column(2)
-                      .data()
-                      .reduce(function (a, b) {
-                          return intVal(a) + intVal(b)
-                      }, 0)
+                        .column(2)
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b)
+                        }, 0)
 				
 	  let busyTotal = api
                     .column(3)
@@ -44,25 +49,25 @@ const options = {
                     }, 0)
 				
     let congestionTotal = api
-                        .column(4)
-                        .data()
-                        .reduce(function (a, b) {
-                            return intVal(a) + intVal(b)
-                        }, 0)
+                          .column(4)
+                          .data()
+                          .reduce(function (a, b) {
+                              return intVal(a) + intVal(b)
+                          }, 0)
                 
 	  let noansweredTotal = api
-                      .column(5)
-                      .data()
-                      .reduce(function (a, b) {
-                          return intVal(a) + intVal(b)
-                      }, 0)
+                          .column(5)
+                          .data()
+                          .reduce(function (a, b) {
+                              return intVal(a) + intVal(b)
+                          }, 0)
       
-    $( api.column(0).footer() ).html('')
-    $( api.column(1).footer() ).html('Total')
-    $( api.column(2).footer() ).html(answeredTotal)
-    $( api.column(3).footer() ).html(busyTotal)
-    $( api.column(4).footer() ).html(congestionTotal)
-    $( api.column(5).footer() ).html(noansweredTotal)
+    $(api.column(0).footer()).html('')
+    $(api.column(1).footer()).html('Total')
+    $(api.column(2).footer()).html(answeredTotal)
+    $(api.column(3).footer()).html(busyTotal)
+    $(api.column(4).footer()).html(congestionTotal)
+    $(api.column(5).footer()).html(noansweredTotal)
   }
 } 
 
@@ -71,8 +76,7 @@ const options = {
 <template>  
   <div class="container">
     <div class="row">
-      <div class="col-md-12">
-        <h1>Summary</h1>
+      <div class="col-md-12">        
         <DataTable
         ref="table"
         :columns="columns"

@@ -17,3 +17,4 @@ use App\Http\Controllers\Api\CallLogController;
 
 Route::get('data', [CallLogController::class, 'index']);
 Route::get('pivot', [CallLogController::class, 'pivot']);
+Route::get('average', [CallLogController::class, 'average']);

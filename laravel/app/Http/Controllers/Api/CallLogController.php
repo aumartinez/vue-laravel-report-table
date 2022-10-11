@@ -22,7 +22,7 @@ class CallLogController extends Controller
     public function pivot (Request $request)
     {
         $agents = CallLogs::select('cnam', 'calldate', 'disposition')
-                ->where('cnam','<>','')                
+                ->where('cnam','<>','')
                 ->orderBy('cnam')
                 ->get();
 
@@ -43,7 +43,7 @@ class CallLogController extends Controller
         # Filtering duplicates
         $filtered = $grouped->map(function($item){
             return $item->unique('name');
-        });
+        });        
 
         $filtered = $filtered->flatten(1);        
         return response()->json([
@@ -51,7 +51,43 @@ class CallLogController extends Controller
         ]);
     }
 
-    public function countRecords ($item, $disposition) {
+    public function average (Request $request)
+    {
+        $agents = CallLogs::select('calldate', 'cnam', 'duration')
+                ->where('cnam','<>','')
+                ->orderBy('cnam')
+                ->get();
+
+        $results = $agents->map(function($item) {
+            return [
+                'date' => date('Y-m-d', strtotime($item->calldate)),
+                'name' => $item->cnam,
+                'duration' => $item->duration,
+            ];    
+        });
+
+        # Grouping by dates and names
+        $grouped = $results->groupBy(['date', 'name']);
+
+        # Getting average of duration from nested group
+        $average = $grouped->map(function ($item) {
+            return [
+                $item->map(function ($child) {                    
+                    return [
+                        'date' => $child[0]['date'],
+                        'name' => $child[0]['name'],
+                        'average' => $child->avg('duration'),
+                    ];
+                }),
+            ];            
+        });
+
+        return response()->json([
+            'data' => $average->flatten(2),
+        ]);
+    }
+
+    protected function countRecords ($item, $disposition) {
         $count = CallLogs::select('disposition')
                 ->whereDay('calldate','=', date('d', strtotime($item->calldate)))
                 ->whereMonth('calldate', '=', date('m', strtotime($item->calldate)))
