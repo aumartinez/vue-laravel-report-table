@@ -1,4 +1,5 @@
 <script setup>
+
 import DataTable from 'datatables.net-vue3'
 import SearchBuilder from 'datatables.net-searchbuilder'
 import DateTime from 'datatables.net-datetime'

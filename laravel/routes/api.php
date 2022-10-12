@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CallLogController;
+use App\Http\Controllers\Api\PivotController;
+use App\Http\Controllers\Api\AverageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +17,6 @@ use App\Http\Controllers\Api\CallLogController;
 |
 */
 
-Route::get('data', [CallLogController::class, 'index']);
-Route::get('pivot', [CallLogController::class, 'pivot']);
-Route::get('average', [CallLogController::class, 'average']);
+Route::get('/v1/data', [CallLogController::class, 'data']);
+Route::get('/v1/pivot', [PivotController::class, 'pivot']);
+Route::get('/v1/average', [AverageController::class, 'average']);
