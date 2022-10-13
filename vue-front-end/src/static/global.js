@@ -5,4 +5,5 @@ export const URL = {
   GET_API: BASE_URL + 'data',
   GET_PIVOT: BASE_URL + 'pivot',
   GET_AVERAGE: BASE_URL + 'average',
+  GET_DATA: BASE_URL + 'chart'
 }

@@ -1,5 +1,5 @@
 <script setup>
-
+import { ref, onMounted } from 'vue'
 import DataTable from 'datatables.net-vue3'
 import SearchBuilder from 'datatables.net-searchbuilder'
 import DateTime from 'datatables.net-datetime'
@@ -47,10 +47,22 @@ const columns = [
   },
 ]
 
+let dt
+const table = ref()
+
+onMounted(() => {  
+  dt = table.value.dt()
+})
+
 </script>
 
 <template>  
   <div class="container">
+    <form>
+      <div class="row">
+
+      </div>
+    </form>    
     <div class="row">
       <div class="col-md-12">        
         <DataTable
