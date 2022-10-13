@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CallLogController;
 use App\Http\Controllers\Api\PivotController;
 use App\Http\Controllers\Api\AverageController;
+use App\Http\Controllers\Api\ChartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +21,4 @@ use App\Http\Controllers\Api\AverageController;
 Route::get('/v1/data', [CallLogController::class, 'data']);
 Route::get('/v1/pivot', [PivotController::class, 'pivot']);
 Route::get('/v1/average', [AverageController::class, 'average']);
+Route::get('/v1/chart', [ChartController::class, 'chart']);
