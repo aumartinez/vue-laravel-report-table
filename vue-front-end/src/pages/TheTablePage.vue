@@ -1,7 +1,6 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import DataTable from 'datatables.net-vue3'
-import SearchBuilder from 'datatables.net-searchbuilder'
 import DateTime from 'datatables.net-datetime'
 import { URL } from '../static/global.js'
 import dayjs from 'dayjs'
@@ -11,9 +10,8 @@ import $ from 'jquery'
 dayjs.extend(utc)
 
 DataTable.use(DateTime)
-DataTable.use(SearchBuilder)
 
-const ajax = {
+let ajax = {
   url: URL.GET_API,
   dataSrc: function (json) {
     let newData = json.data
@@ -23,11 +21,7 @@ const ajax = {
     })
     
     return newData
-  }
-}
-
-const options = {
-  dom: 'Qfrtip'
+  },
 }
 
 const columns = [
@@ -48,10 +42,43 @@ const columns = [
 ]
 
 let dt
-const table = ref()
+const table = ref(null)
 
-onMounted(() => {  
+function searchDate() {
   dt = table.value.dt()
+
+  let min = dayjs($('#to').val())
+  let max = dayjs($('#from').val())
+
+  let o = dt.data()
+
+  let filtered = o.filter((o, i) => {
+    let cDate = dayjs(o.calldate)
+    if (!min.isValid() || !max.isValid()) {
+      return true
+    }
+
+    if (cDate.isValid()) {
+      if (min.isBefore(cDate) && cDate.isBefore(max)) {
+        return true
+      }
+    }
+  })
+  
+  dt.clear().rows.add(filtered).draw()  
+}
+
+function clearData () {
+  dt = table.value.dt()
+  dt.ajax.url(URL.GET_API).load()
+  dt.search('').draw()
+}
+
+onMounted(() => {
+  $('input').on('change', function(){
+    dt = table.value.dt()
+    dt.ajax.url(URL.GET_API).load()
+  })
 })
 
 </script>
@@ -59,8 +86,31 @@ onMounted(() => {
 <template>  
   <div class="container">
     <form>
-      <div class="row">
-
+      <div class="row mb-5">
+        <div class="col-md-3">
+          <label class="form-label" for="to">To:</label>
+          <input type="date" class="form-control" id="to" />
+        </div>
+        <div class="col-md-3">
+          <label class="form-label" for="from">From:</label>
+          <input type="date" class="form-control" id="from" />
+        </div>
+        <div class="col-md-3 align-self-end">
+          <button
+          ref="button"
+          @click="searchDate()"
+          class="btn btn-primary w-100"
+          type="button">
+            Search
+          </button>          
+        </div>
+        <div class="col-md-3 align-self-end">
+          <button 
+          @click="clearData()"
+          class="btn btn-primary w-100" type="reset">
+            Clear
+          </button>
+        </div>
       </div>
     </form>    
     <div class="row">

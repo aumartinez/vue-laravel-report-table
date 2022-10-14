@@ -25,28 +25,28 @@ let chartOptions = {
 let chartData = computed(() => {
   let data = {
     labels: store.chartLabels,
-      datasets: [
-        {
-          label: 'Answered',
-          backgroundColor: '#E0BBE4',
-          data: store.dataAnswered
-        },
-        {
-          label: 'Busy',
-          backgroundColor: '#957DAD',
-          data: store.dataBusy
-        },
-        {
-          label: 'Congestion',
-          backgroundColor: '#D291BC',
-          data: store.dataCongestion
-        },
-        {
-          label: 'No answered',
-          backgroundColor: '#FEC8D8',
-          data: store.dataNoAnswered
-        }
-      ]
+    datasets: [
+      {
+        label: 'Answered',
+        backgroundColor: '#E0BBE4',
+        data: store.dataAnswered
+      },
+      {
+        label: 'Busy',
+        backgroundColor: '#957DAD',
+        data: store.dataBusy
+      },
+      {
+        label: 'Congestion',
+        backgroundColor: '#D291BC',
+        data: store.dataCongestion
+      },
+      {
+        label: 'No answered',
+        backgroundColor: '#FEC8D8',
+        data: store.dataNoAnswered
+      }
+    ]
   }
   return data  
 })
