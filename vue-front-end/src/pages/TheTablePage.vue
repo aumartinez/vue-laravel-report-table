@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import DataTable from 'datatables.net-vue3'
 import DateTime from 'datatables.net-datetime'
 import { URL } from '../static/global.js'
